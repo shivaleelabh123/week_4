@@ -263,4 +263,177 @@ ISS = ID1 + ID2
 - CMRR
 
 ---
+# CIRCUIT 1
+
+# Differential Amplifier Design (NMOS with Resistive Load)
+
+##  Given Specifications
+
+- Technology: 180 nm  
+- Channel Length: L = 360 nm  
+- Power Constraint: P ≤ 1.5 mW  
+- Supply Voltage: VDD = 1.8 V  
+
+---
+
+##  Step 1: Tail Current Calculation
+
+Total power relation:
+
+P = VDD × I_total  
+
+I_total = P / VDD  
+I_total = 1.5 mW / 1.8 V ≈ 0.833 mA  
+
+Tail current:
+
+ISS ≈ 833 µA  
+
+Branch currents:
+
+ID1 = ID2 = ISS / 2 ≈ 416 µA  
+
+---
+
+##  Step 2: Overdrive Voltage
+
+Choose:
+
+Vov = VGS − VTH ≈ 0.2 V  
+
+---
+
+##  Step 3: NMOS (M1, M2) Design
+
+Saturation current equation:
+
+ID = (1/2) × µnCox × (W/L) × Vov²  
+
+Rearranged:
+
+W/L = (2ID) / (µnCox × Vov²)  
+
+Assume:
+
+µnCox ≈ 200 µA/V²  
+
+Substitute:
+
+W/L = (2 × 416 µA) / (200 × 0.2²)  
+W/L = 832 / (200 × 0.04)  
+W/L = 832 / 8  
+W/L ≈ 104  
+
+Thus:
+
+(W/L)₁ = (W/L)₂ ≈ 104  
+
+Given L = 0.36 µm:
+
+W ≈ 104 × 0.36 ≈ 37.4 µm  
+
+---
+
+##  Step 4: Load Resistor Design
+
+Assume output common-mode voltage:
+
+Vout ≈ VDD / 2 = 0.9 V  
+
+Voltage across RD:
+
+VRD = VDD − Vout = 1.8 − 0.9 = 0.9 V  
+
+RD = VRD / ID  
+RD = 0.9 / 416 µA ≈ 2.16 kΩ  
+
+---
+
+##  Step 5: Tail Current Source (M3)
+
+Current:
+
+ID3 = ISS = 833 µA  
+
+W/L = (2 × 833 µA) / (200 × 0.04)  
+W/L = 1666 / 8 ≈ 208  
+
+Thus:
+
+(W/L)₃ ≈ 208  
+
+Width:
+
+W ≈ 208 × 0.36 ≈ 74.9 µm  
+
+---
+
+##  Step 6: Saturation Conditions
+
+### For M1, M2:
+
+Condition:
+
+VDS ≥ VGS − VTH = Vov  
+
+0.9 V ≥ 0.2 V ✔  
+
+M1, M2 operate in saturation  
+
+---
+
+### For M3:
+
+Condition:
+
+VDS3 ≥ Vov  
+
+Source node:
+
+VS ≈ 0.2 V  
+
+So:
+
+VDS3 ≈ 0.2 V ✔  
+
+M3 operates in saturation  
+
+---
+
+##  Step 7: Gain Calculation
+
+Transconductance:
+
+gm = 2ID / Vov  
+gm = 2 × 416 µA / 0.2  
+gm ≈ 4.16 mS  
+
+Voltage gain:
+
+Av = gm × RD  
+Av = 4.16 mS × 2.16 kΩ  
+Av ≈ 9  
+
+Gain in dB:
+
+Av(dB) = 20 log(9) ≈ 19 dB  
+
+---
+
+## Step 8: Final Design Summary
+
+| Parameter | Value |
+|----------|------|
+| VDD | 1.8 V |
+| ISS | 833 µA |
+| ID (each) | 416 µA |
+| Vov | 0.2 V |
+| (W/L)₁,₂ | 104 |
+| W₁,₂ | 37.4 µm |
+| (W/L)₃ | 208 |
+| W₃ | 74.9 µm |
+| RD | 2.16 kΩ |
+| Gain | ~9 (≈19 dB) |
+
+---
 
