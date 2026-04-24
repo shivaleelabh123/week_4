@@ -349,26 +349,7 @@ RD = 0.9 / 416 µA ≈ 2.16 kΩ
 
 ---
 
-##  Step 5: Tail Current Source (M3)
-
-Current:
-
-ID3 = ISS = 833 µA  
-
-W/L = (2 × 833 µA) / (200 × 0.04)  
-W/L = 1666 / 8 ≈ 208  
-
-Thus:
-
-(W/L)₃ ≈ 208  
-
-Width:
-
-W ≈ 208 × 0.36 ≈ 74.9 µm  
-
----
-
-##  Step 6: Saturation Conditions
+##  Step 5: Saturation Conditions
 
 ### For M1, M2:
 
@@ -382,25 +363,7 @@ M1, M2 operate in saturation
 
 ---
 
-### For M3:
-
-Condition:
-
-VDS3 ≥ Vov  
-
-Source node:
-
-VS ≈ 0.2 V  
-
-So:
-
-VDS3 ≈ 0.2 V ✔  
-
-M3 operates in saturation  
-
----
-
-##  Step 7: Gain Calculation
+##  Step 6: Gain Calculation
 
 Transconductance:
 
@@ -420,7 +383,7 @@ Av(dB) = 20 log(9) ≈ 19 dB
 
 ---
 
-## Step 8: Final Design Summary
+## Step 7: Final Design Summary
 
 | Parameter | Value |
 |----------|------|
@@ -430,15 +393,13 @@ Av(dB) = 20 log(9) ≈ 19 dB
 | Vov | 0.2 V |
 | (W/L)₁,₂ | 104 |
 | W₁,₂ | 37.4 µm |
-| (W/L)₃ | 208 |
-| W₃ | 74.9 µm |
 | RD | 2.16 kΩ |
 | Gain | ~9 (≈19 dB) |
 
 ---
 
-
-# step 1: DC OPERTING POINT 
+# step 1:
+# 1: DC OPERTING POINT 
 Before tuning 
 <img width="1600" height="820" alt="WhatsApp Image 2026-04-24 at 11 13 51 AM" src="https://github.com/user-attachments/assets/c9d68fb7-9778-4b63-8489-528dcf647abd" />
 
@@ -446,9 +407,8 @@ Before tuning
 After tuning
 <img width="1600" height="823" alt="WhatsApp Image 2026-04-24 at 11 20 05 AM" src="https://github.com/user-attachments/assets/bc97170e-564d-40a0-8e4b-9ac1d5efab8d" />
 
-# 2:TRANSIENT ANLYASIS
 
-# Input Common-Mode Range (ICMR) Analysis
+# 2:Input Common-Mode Range (ICMR) Analysis
 
 ##  Objective
 
@@ -682,7 +642,8 @@ Vov ≈ 0.2 V
 
 ---
 
-# step 2: Transient Analysis (CL = 10 pF)
+# step 2:
+# Transient Analysis (CL = 10 pF)
 
 ### Setup:
 - Apply differential input signal  
@@ -738,12 +699,13 @@ vid = 0.5 V
 
 ---
 
-# gain cal
+# gain calculation
 <img width="1918" height="977" alt="image" src="https://github.com/user-attachments/assets/ea6c4b72-c955-47e5-81f7-89d4f0d83c49" />
  
 ---
 
-##  step 3: AC Analysis (Frequency Response (CL = 10 pF))
+##  step 3:
+# AC Analysis (Frequency Response (CL = 10 pF))
 
 ##  Simulation Setup
 
