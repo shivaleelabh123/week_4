@@ -844,3 +844,151 @@ GBW ≈ 31.75 MHz
 ---
 
 
+# step 4: Comparison of Theoretical vs Simulation Results
+
+## 1. DC Operating Point
+
+| Parameter | Theoretical | Simulation | Observation |
+|----------|------------|------------|-------------|
+| Tail current (ISS) | 833 µA | ~830–840 µA | Very close  |
+| Branch current (ID1 = ID2) | 416 µA | ~410–420 µA | Good matching  |
+| Output voltage (VoCM) | ~0 V | ~0 V | Correct biasing  |
+| Tail node voltage | ≈ −0.7 V | ~−0.7 V | Matches |
+
+### Conclusion:
+- DC biasing is accurate  
+- Transistors operate in saturation  
+- Circuit is properly designed  
+
+---
+
+## 2. Gain Comparison
+
+### Theoretical:
+Av = gm × RD  
+Av ≈ 9  
+Av(dB) ≈ 19 dB  
+
+### Simulation:
+Av ≈ 6.35  
+Av ≈ 16.05 dB  
+
+### Comparison:
+
+| Parameter | Theoretical | Simulation | Difference |
+|----------|------------|------------|------------|
+| Gain (Av) | ~9 | ~6.35 | Reduced |
+| Gain (dB) | ~19 dB | ~16 dB | ~3 dB lower |
+
+### Reason:
+- Finite output resistance (ro)  
+- Channel length modulation  
+- Non-ideal current source  
+- Loading effects  
+
+Actual gain:
+Av = gm × (RD || ro)
+
+---
+
+## 3. Bandwidth Comparison
+
+### Theoretical:
+f-3dB ≈ 7.3 MHz  
+
+### Simulation:
+f-3dB ≈ 5 MHz  
+
+### Comparison:
+
+| Parameter | Theoretical | Simulation | Difference |
+|----------|------------|------------|------------|
+| Bandwidth | ~7.3 MHz | ~5 MHz | Reduced |
+
+### Reason:
+- Parasitic capacitances (Cgs, Cgd)  
+- Miller effect  
+- Layout/wiring capacitance  
+
+---
+
+## 4. Gain Bandwidth Product (GBW)
+
+### Theoretical:
+GBW ≈ 9 × 7.3 ≈ 66 MHz  
+
+### Simulation:
+GBW ≈ 6.35 × 5 ≈ 31.75 MHz  
+
+### Comparison:
+
+| Parameter | Theoretical | Simulation |
+|----------|------------|------------|
+| GBW | ~66 MHz | ~32 MHz |
+
+### Reason:
+- Reduction in both gain and bandwidth  
+
+---
+
+## 5. ICMR Comparison
+
+| Parameter | Theoretical | Simulation | Observation |
+|----------|------------|------------|-------------|
+| VICM(min) | −0.1 V | ~−0.1 V | Matches ✔ |
+| VICM(max) | 0.4 V | ~0.35–0.4 V | Slight variation |
+
+### Reason:
+- Threshold voltage variation  
+- Non-ideal MOS behavior  
+
+---
+
+## 6. Differential Input Range
+
+| Parameter | Theoretical | Simulation | Observation |
+|----------|------------|------------|-------------|
+| Linear range | ±0.4 V | ~±0.35–0.4 V | Close ✔ |
+
+### Observation:
+- Both transistors ON in linear region  
+- Matches expected behavior  
+
+---
+
+## 7. Transient Analysis
+
+| Condition | Theory | Simulation | Result |
+|----------|-------|------------|--------|
+| |vid| < 2Vov | Linear | Sinusoidal output | ✔ |
+| |vid| > 2Vov | Nonlinear | Distorted output | ✔ |
+
+---
+
+## 8. Overall Summary
+
+| Parameter | Theoretical | Simulation | Status |
+|----------|------------|------------|--------|
+| Gain | 19 dB | 16 dB | Lower |
+| Bandwidth | 7.3 MHz | 5 MHz | Lower |
+| GBW | 66 MHz | 32 MHz | Lower |
+| ICMR | Accurate | Matches | Good |
+| Linearity | ±0.4 V | Matches | Good |
+| DC Bias | Ideal | Matches | Good |
+
+---
+
+## Final Conclusion
+
+- The MOS differential amplifier operates correctly as per design  
+- DC operating point closely matches theoretical values  
+- Gain and bandwidth are lower in simulation due to non-ideal effects:
+  - Channel length modulation  
+  - Parasitic capacitances  
+  - Finite output resistance  
+- The circuit behaves:
+  - As a linear amplifier for small signals  
+  - As a switch for large signals  
+- Overall, simulation results validate the theoretical design with expected practical deviations
+
+### CERCUIT 2:
