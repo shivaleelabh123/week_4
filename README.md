@@ -264,6 +264,7 @@ ISS = ID1 + ID2
 
 ---
 # CIRCUIT 1
+<img width="1663" height="982" alt="image" src="https://github.com/user-attachments/assets/cc9dd04e-ac1c-49c5-a2ac-7c1d8a36d4ad" />
 
 # Differential Amplifier Design (NMOS with Resistive Load)
 
