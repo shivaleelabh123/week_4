@@ -954,4 +954,92 @@ GBW ≈ 6.35 × 5 ≈ 31.75 MHz
   - As a switch for large signals  
 - Overall, simulation results validate the theoretical design with expected practical deviations
 
+
 ### CERCUIT 2:
+
+# Differential Amplifier Design (Active Load / Current Mirror Load)
+<img width="1907" height="982" alt="image" src="https://github.com/user-attachments/assets/3569c911-14af-4409-a7d8-28d6f092f57c" />
+
+## Step 1: DC Analysis
+
+From the LTspice operating point (.op) simulation results:<img width="1600" height="816" alt="WhatsApp Image 2026-05-31 at 11 27 33 PM" src="https://github.com/user-attachments/assets/bf1e7747-ad57-41ca-8c9c-592230179af2" />
+
+
+### Voltages:
+- **V(n001) [VDD]:** 0.9 V
+- **V(n002) [Bias Voltage]:** -0.37 V
+- **V(n003) [VSS]:** -0.9 V
+- **V(vin1):** 0 V
+- **V(vin2):** 0 V
+- **V(vout1):** 0.04135 V (≈ 0 V)
+- **V(vout2):** 0.04135 V (≈ 0 V)
+- **V(vp) [Tail Node]:** -0.70115 V (Perfectly matches the -0.7 V target)
+
+### Currents:
+- **Total Sinking Tail Current Id(M5):** 0.002107 A (2.107 mA)
+- **Branch NMOS Currents Id(M1) & Id(M2):** 0.001053 A (1.053 mA) each
+- **Load PMOS Currents Id(M3) & Id(M4):** 0.001053 A (1.053 mA) each
+
+### Key DC Observations:
+- **Tail Headroom Voltage:** VDS5 = Vp - VSS = -0.70115 V - (-0.9 V) = 0.19885 V ≈ 0.2 V.
+- **Symmetry Check:** The total tail current of 2.107 mA splits perfectly down the center with exactly 1.053 mA passing through each branch.
+- **Output Common Mode Alignment:** Both Vout1 and Vout2 settle stably at 41.35 mV, satisfying the required 0 V output bias target.
+
+---
+
+## Step 2: Transient Analysis
+
+### (a) Case 1: vid < 2Vov (Linear Region)
+- **Setup:** Input amplitude set to 10mV (`SINE(0 10m 1k)`).
+- **Waveform Plot:**
+<img width="1600" height="815" alt="WhatsApp Image 2026-05-31 at 11 26 22 PM" src="https://github.com/user-attachments/assets/018d7f2c-5bd3-45a4-ba5c-68d46e2ee21c" />
+
+- **Observation:** - Input signals V(vin1) and V(vin2) are standard small-signal differential sine waves.
+  - Output waveforms V(vout1) and V(vout2) show safe, stable, inverted sinusoidal tracking without harmonic distortion.
+  - Circuit behaves perfectly as a linear differential amplifier.
+
+---
+
+### (b) Case 2: vid > 2Vov (Nonlinear / Clipped Region)
+- **Setup:** Input amplitude increased to 300mV (`SINE(0 300m 1k)`).
+- **Waveform Plot:**
+<img width="1600" height="815" alt="WhatsApp Image 2026-05-31 at 11 29 55 PM" src="https://github.com/user-attachments/assets/deb1c450-e9bc-4f55-a017-fe9b9fdbf8fd" />
+
+- **Observation:**
+  - The massive 300 mV input dynamic swing completely overdrives the differential stage.
+  - The output voltage swings completely between the upper and lower headroom boundaries, leading to severe flatline compression clipping.
+  - The circuit drops out of active linear amplification and functions cleanly as a current switch.
+
+---
+
+## Step 3: AC Analysis (Frequency Response)
+
+- **Simulation Traces:**
+<img width="1600" height="852" alt="WhatsApp Image 2026-05-31 at 11 46 42 PM" src="https://github.com/user-attachments/assets/e29b5af9-62dd-4562-8cf1-a14deabdb393" />
+
+From the simulated AC response plots:
+
+- **(a) Midband Gain:** - The low-frequency flat band gain records a peak magnitude value of **3.81 dB**.
+  - Convert to linear scale: Av = 10^(3.81 / 20) ≈ 1.55 V/V.
+
+- **(b) -3 dB Bandwidth (BW):**
+  - Midband Gain = 3.81 dB.
+  - Half-power boundary location (-3 dB level) = 0.81 dB.
+  - Cutoff frequency measured at the 0.81 dB drop marker: **f-3dB ≈ 26.81 MHz**.
+
+- **(c) Unity Gain Frequency / Bandwidth (UGB):**
+  - The frequency marker where the magnitude curve drops down across the 0 dB reference line: **f-0dB ≈ 87.91 MHz**.
+
+- **(d) Gain Bandwidth Product (GBP):**
+  - GBP = Linear Gain × -3 dB Bandwidth
+  - GBP = 1.55 × 26.81 MHz ≈ **41.56 MHz**.
+
+---
+
+## Inference and Structural Summary 
+
+- **Active Load Advantages:** Substituting passive resistors with active PMOS loads ($M_3, M_4$) yields substantial silicon real estate area savings and improves layout matching constraints.
+- **Headroom vs. Swing Limitations:** The overall output range is restricted by the minimum saturation voltage requirements ($V_{DS(sat)}$) needed to keep the stacked active NMOS driver and PMOS load configurations functioning inside their saturation regions.
+- **Dominant Pole Action:** Because the active load nodes present a high small-signal incremental channel output resistance ($R_{out} \approx r_{o} \parallel r_{o}$), it interacts directly with the $C_L = 10\text{ pF}$ external capacitor to dictate a low-frequency dominant pole roll-off.
+
+- CIRCUIT 3
