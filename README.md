@@ -1135,3 +1135,18 @@ From the simulated AC frequency sweeps:
 - **Differential to Single-Ended Conversion:** This configuration uses a PMOS current mirror active load to cleanly convert a differential input signal into a single-ended output reference.
 - **Transconductance Doubling Effect:** The active current mirror architecture routes current from the opposite branch to combine in-phase at the primary output node, effectively doubling the stage's transconductance.
 - **Frequency Pole Limits:** The high internal small-signal resistance profile ($r_o \parallel r_o$) interacts with the load capacitance ($C_L = 10\text{ pF}$) to create a lower-frequency dominant pole, capping high-frequency gain performance.
+
+
+
+
+
+#### Comparative Analysis of Circuits 1, 2, and 3
+
+| Comparison Parameter | Circuit 1: NMOS with Resistive Load | Circuit 2: NMOS with Active Load | Circuit 3: CMOS Current Mirror (Diff to Single-Ended) |
+| :--- | :--- | :--- | :--- |
+| **Voltage Gain (Av)** | **Highest (16.05 dB / ~6.35 V/V)**<br>Limited strictly by gm × RD. | **Moderate-Low (3.81 dB / ~1.55 V/V)**<br>Reduced due to specific biasing constraints. | **Lowest (2.01 dB / ~1.26 V/V)**<br>Features transconductance doubling but experiences loading limitations. |
+| **Power Consumption** | **Moderate (~1.50 mW)**<br>Tail current: ~833 µA @ 1.8 V total supply. | **Highest (~3.79 mW)**<br>Tail current: ~2.107 mA @ 1.8 V total supply. | **Lowest (~0.71 mW)**<br>Tail current: ~394.6 µA @ 1.8 V total supply. |
+| **Silicon Area** | **Extremely Large**<br>Passive resistors (RD = 2.16 kΩ) occupy massive IC real estate. | **Small / Compact**<br>Bulky resistors are replaced with compact active PMOS loads. | **Minimal / Most Compact**<br>All-MOS implementation with single-ended output routing savings. |
+| **Input Common-Mode Range (ICMR)** | **Symmetric (–0.1 V to 0.4 V)**<br>Bounded tightly by tail compliance and driver triode limits. | **Highly Constrained**<br>Requires sufficient headroom to keep the active PMOS and NMOS stacked pairs saturated. | **Flexible**<br>Biased at a lower branch current, which relaxes compliance limits on the tail node. |
+| **Output Voltage Swing** | **Symmetric & Wide**<br>Can swing closely to VDD since voltage drops purely across RD. | **Moderately Restricted**<br>Limited symmetrically by the saturation requirements (VDS(sat)) of M3/M4. | **Asymmetric**<br>Single-ended output topology limits the swing boundaries based on the current mirror tracking. |
+| **Output Type** | Differential (Double-Ended) | Differential (Double-Ended) | Single-Ended |
