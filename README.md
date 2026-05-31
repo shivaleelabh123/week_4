@@ -1042,4 +1042,96 @@ From the simulated AC response plots:
 - **Headroom vs. Swing Limitations:** The overall output range is restricted by the minimum saturation voltage requirements ($V_{DS(sat)}$) needed to keep the stacked active NMOS driver and PMOS load configurations functioning inside their saturation regions.
 - **Dominant Pole Action:** Because the active load nodes present a high small-signal incremental channel output resistance ($R_{out} \approx r_{o} \parallel r_{o}$), it interacts directly with the $C_L = 10\text{ pF}$ external capacitor to dictate a low-frequency dominant pole roll-off.
 
-- CIRCUIT 3
+
+
+### CIRCUIT 3
+
+<img width="1917" height="983" alt="image" src="https://github.com/user-attachments/assets/f6e5acc8-605f-4c29-a9fe-729da5c463a9" />
+
+# CMOS Current Mirror (Differential to Single-Ended)
+
+## Step 1: DC Analysis
+
+From the LTspice operating point (.op) simulation logs:
+
+### Voltages:
+- **V(n001) [Bias V5]:** 0.3 V
+- **V(n002) [VDD]:** 0.9 V
+- **V(n003):** 0.7956 V
+- **V(n004):** 0.7956 V
+- **V(n005) [Gate Bias V3]:** -0.37 V
+- **V(n006):** -0.78208 V
+- **V(n007) [VSS]:** -0.9 V
+- **V(vin1):** 0 V
+- **V(vin2):** 0 V
+- **V(vout1):** 0.85215 V
+- **V(vout2):** 0.85215 V
+- **V(vp) [Tail Node]:** -0.51117 V
+
+### Currents:
+- **Branch NMOS Currents Id(M1) & Id(M2):** 0.0001973 A (197.3 µA) each
+- **Load PMOS Currents Id(M3) & Id(M4):** 0.0001973 A (197.3 µA) each
+
+### Key DC Observations:
+- **Current Matching:** Branch currents are symmetrically balanced at 197.3 µA under zero differential input configuration.
+- **Output Setup:** The operating point levels out both output nodes at a matching quiescent level of 0.852 V prior to dynamic signal entry.
+<img width="1600" height="824" alt="WhatsApp Image 2026-06-01 at 12 28 54 AM" src="https://github.com/user-attachments/assets/7cb882e8-83d5-4053-bfbb-fde4935f3d5c" />
+
+---
+
+## Step 2: Transient Analysis
+
+### (a) Case 1: vid < 2Vov (Linear Region)
+- **Setup:** Input amplitude set to 10mV (`SINE(0 10m 1k)`).
+- **Waveform Plot:**
+<img width="1600" height="814" alt="WhatsApp Image 2026-06-01 at 12 32 10 AM" src="https://github.com/user-attachments/assets/2e061f5b-8f64-49c0-8626-d81967ad8d7e" />
+
+- **Observation:**
+  - V(vout1) and V(vout2) trace out balanced, clean, out-of-phase differential sine waves.
+  - The peak-to-peak output swing scales smoothly without any distortion artifacts.
+  - Circuit functions cleanly within its linear amplification limits.
+
+---
+
+### (b) Case 2: vid > 2Vov (Nonlinear / Clipped Region)
+- **Setup:** Input amplitude increased to 300mV (`SINE(0 300m 1k)`).
+- **Waveform Plot:**
+<img width="1600" height="824" alt="WhatsApp Image 2026-06-01 at 12 33 22 AM" src="https://github.com/user-attachments/assets/0caa3aef-b64c-4705-ac3f-56ec7bdaf929" />
+
+- **Observation:**
+  - The massive 300 mV input amplitude overdrives the active differential matching core.
+  - The signal faces severe flatline clipping distortion as it hits the voltage headroom boundaries of the active current mirror configuration.
+  - Circuit saturates entirely and acts like a non-linear current switch.
+
+---
+
+## Step 3: AC Analysis (Frequency Response)
+
+- **Simulation Traces:**
+<img width="1600" height="822" alt="WhatsApp Image 2026-06-01 at 12 37 21 AM" src="https://github.com/user-attachments/assets/8f3053a7-8415-4deb-9044-f99c79030f21" />
+
+From the simulated AC frequency sweeps:
+
+- **(a) Midband Gain:**
+  - The low-frequency flat band gain records a maximum magnitude value of **2.01 dB**.
+  - Convert to linear scale: Av = 10^(2.01 / 20) ≈ 1.26 V/V.
+
+- **(b) -3 dB Bandwidth (BW):**
+  - Midband Gain = 2.01 dB.
+  - Half-power boundary location (-3 dB level) = -0.99 dB.
+  - Cutoff frequency measured at the -0.99 dB drop marker: **f-3dB ≈ 26.81 MHz**.
+
+- **(c) Unity Gain Frequency / Bandwidth (UGB):**
+  - The frequency marker location where the magnitude curve crosses the 0 dB reference baseline: **f-0dB ≈ 87.91 MHz**.
+
+- **(d) Gain Bandwidth Product (GBP):**
+  - GBP = Linear Gain × -3 dB Bandwidth
+  - GBP = 1.26 × 26.81 MHz ≈ **33.78 MHz**.
+
+---
+
+## Inference and Structural Summary 
+
+- **Differential to Single-Ended Conversion:** This configuration uses a PMOS current mirror active load to cleanly convert a differential input signal into a single-ended output reference.
+- **Transconductance Doubling Effect:** The active current mirror architecture routes current from the opposite branch to combine in-phase at the primary output node, effectively doubling the stage's transconductance.
+- **Frequency Pole Limits:** The high internal small-signal resistance profile ($r_o \parallel r_o$) interacts with the load capacitance ($C_L = 10\text{ pF}$) to create a lower-frequency dominant pole, capping high-frequency gain performance.
